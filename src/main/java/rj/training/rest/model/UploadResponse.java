@@ -29,4 +29,10 @@ public void setBytes(Long bytes) {
 }
 private String fileType;
 private Long bytes;
+
+@Override
+public String toString() {
+	// TODO Auto-generated method stub
+	return String.format("UploadResponse=[%s, %s, %s, %d]", multiFileName, originalFileName, fileType, bytes)  ;
+}
 }

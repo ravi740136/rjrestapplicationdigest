@@ -1,5 +1,8 @@
 package rj.training.rest.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import rj.training.rest.exceptions.DuplicateMovieException;
 import rj.training.rest.exceptions.InvalidMovieException;
+import rj.training.rest.model.CompanyResponse;
 import rj.training.rest.model.Movie;
 import rj.training.rest.model.UploadResponse;
 import rj.training.rest.repository.MovieRepository;
@@ -37,6 +41,24 @@ public class MyRestAppController {
 		if (!m.isPresent()) {
 			throw new InvalidMovieException("movie with specified id " + id + " does not exist ");
 		}
+		return ResponseEntity.ok(m);
+	}
+	
+	@GetMapping(value = "/apitokenauthuser/getMovies", produces = "application/json")
+	public ResponseEntity<?> getMoviesAuthAPIToken() throws InvalidMovieException {
+		Iterable<Movie> m = repository.findAll();
+		return ResponseEntity.ok(m);
+	}
+	
+	
+	@GetMapping(value = "/basicauthuser/getMovies", produces = "application/json")
+	public ResponseEntity<?> getMoviesAuthBasic() throws InvalidMovieException {
+		Iterable<Movie> m = repository.findAll();
+		return ResponseEntity.ok(m);
+	}
+	@GetMapping(value = "/basicauthadmin/getMovies", produces = "application/json")
+	public ResponseEntity<?> getMoviesAuthBasicAdmin() throws InvalidMovieException {
+		Iterable<Movie> m = repository.findAll();
 		return ResponseEntity.ok(m);
 	}
 
@@ -112,7 +134,7 @@ public class MyRestAppController {
 	}
 
 	@PostMapping(value = "/movie/uploaddata", produces = "application/json")
-	public ResponseEntity<UploadResponse> uploadMovieData
+	public ResponseEntity<UploadResponse[]> uploadMovieData
 	(@RequestParam("multifilename") String multiFileName,
 			@RequestParam String originalFileName, 
 			@RequestParam String fileType, 
@@ -122,6 +144,48 @@ public class MyRestAppController {
 		us.setMultiFileName(multiFileName);
 		us.setFileType(fileType);
 		us.setBytes(bytes);
-		return ResponseEntity.ok(us);
+		UploadResponse[] uss = {us, us};
+		return ResponseEntity.ok(uss);
+	}
+	
+	@PostMapping(value = "/movie/uploaddataarr", produces = "application/json")
+	public ResponseEntity<UploadResponse[]> uploadMovieDataArr
+	(@RequestParam("multifilename") String multiFileName,
+			@RequestParam String originalFileName, 
+			@RequestParam String fileType, 
+			@RequestParam long bytes) {
+		UploadResponse us = new UploadResponse();
+		us.setOriginalFileName(originalFileName);
+		us.setMultiFileName(multiFileName);
+		us.setFileType(fileType);
+		us.setBytes(bytes);
+		UploadResponse[] uss = {us, us};
+		return ResponseEntity.ok(uss);
+	}
+	
+	@PostMapping(value = "/movie/uploaddatalist", produces = "application/json")
+	public ResponseEntity<List<UploadResponse>> uploadMovieDataList
+	(@RequestParam("multifilename") String multiFileName,
+			@RequestParam String originalFileName, 
+			@RequestParam String fileType, 
+			@RequestParam long bytes) {
+		UploadResponse us = new UploadResponse();
+		us.setOriginalFileName(originalFileName);
+		us.setMultiFileName(multiFileName);
+		us.setFileType(fileType);
+		us.setBytes(bytes);
+		UploadResponse us2 = new UploadResponse();
+		us2.setOriginalFileName(us.getOriginalFileName()+"2");
+		us2.setFileType(us.getFileType()+"2");
+		us2.setMultiFileName(us.getMultiFileName()+"2");
+	 	us2.setBytes(us.getBytes()+100);
+		List<UploadResponse> url = Arrays.asList(us,us2);
+		return ResponseEntity.ok(url);
+	}
+	
+	@GetMapping("/company")
+	public ResponseEntity<CompanyResponse> getCompanyDetails(){
+		CompanyResponse cr = CompanyFactory.getResponse();
+		return ResponseEntity.ok(cr);
 	}
 }
