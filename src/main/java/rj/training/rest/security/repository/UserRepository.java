@@ -2,10 +2,10 @@ package rj.training.rest.security.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import rj.training.rest.security.model.User;
+import rj.training.rest.security.model.Users;
 
-public interface UserRepository extends JpaRepository<User, String> {
-    User  findByUsername(String username);
+public interface UserRepository extends JpaRepository<Users, String> {
+    Users  findByUsername(String username);
 
-	    User findByToken(String token);
+	    Users findByToken(String token);
 }

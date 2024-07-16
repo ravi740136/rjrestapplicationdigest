@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,15 @@ import rj.training.rest.model.UploadResponse;
 
 public class MoviesPostTest {
 
+	@BeforeClass
+	public void bc() {
+		//when one of the urls are configured for https, http is not working,
+		//so setting https for all urls
+		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+				//RestAssured.baseURI = "https://localhost:8443/myrestapp";
+		RestAssured.useRelaxedHTTPSValidation();
+	}
+	
 	@Test
 	public void testRestAppPost() {
 		Map<String, String> address = new HashMap();
@@ -40,7 +50,7 @@ public class MoviesPostTest {
 		m.put("name", "kalki");
 		m.put("synopsis", address);
 
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		
 		System.out.println(RestAssured.baseURI);
 		Response r = given().basePath("/movie")
 				// default content type is plain text
@@ -68,7 +78,7 @@ public class MoviesPostTest {
 		m.put("name", "kalki");
 		m.put("synopsis", address);
 
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		System.out.println(RestAssured.baseURI);
 		Response r = given().basePath("/movie")
 				// default content type is plain text
@@ -100,7 +110,7 @@ public class MoviesPostTest {
 		m.put("name", "kalki");
 		m.put("synopsis", address);
 
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		System.out.println(RestAssured.baseURI);
 		Response r = given().basePath("/movie")
 				// default content type is plain text
@@ -113,7 +123,7 @@ public class MoviesPostTest {
 
 	@Test
 	public void verifyMovieCount() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().basePath("/movies/count").when().get();
 		r.then().log().all();
 		System.out.println("===" + r.getBody().jsonPath().getLong("$"));
@@ -125,14 +135,21 @@ public class MoviesPostTest {
 
 	@Test
 	public void testDeleteMovie() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().basePath("/movies/1").when().delete();
 		r.then().log().all();
 	}
 
 	@Test
+	public void testGetAllMovies() {
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		Response r = given().log().all().basePath("/movies").when().get();
+		r.then().log().all();
+	}
+	
+	@Test
 	public void testUpdateMovie() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().basePath("/movie/1").when().get();
 		r.then().log().all();
 		Movie m = r.as(Movie.class);
@@ -143,7 +160,7 @@ public class MoviesPostTest {
 
 	@Test
 	public void testPatchMovie() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().basePath("/movie/1").when().get();
 		r.then().log().all();
 		Movie m = r.as(Movie.class);
@@ -154,7 +171,7 @@ public class MoviesPostTest {
 
 	@Test
 	public void testUploadMultiPartDescription() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().basePath("/movie/{fu}")
 //as it is multipart request rest assured
 //will by default set the content type as multipart/form-data
@@ -169,7 +186,7 @@ public class MoviesPostTest {
 
 	@Test
 	public void testQueryParamsRequest() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().basePath("/movie/uploaddata")
 				.contentType("application/json")
 				.queryParam("multifilename", "mymovieslist")
@@ -186,7 +203,7 @@ public class MoviesPostTest {
 	 */
 	@Test
 	public void testFormParamsRequest() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().
 			//config(RestAssured.config().jsonConfig(jsonConfig)).	
 			basePath("/movie/uploaddataarr")
@@ -210,7 +227,7 @@ System.out.println("array of upload datat: "+Arrays.toString(r.as(UploadResponse
 	
 	@Test
 	public void testFormParamsRequestReturnAsList() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().	
 			basePath("/movie/uploaddatalist") 
 				.contentType("application/x-www-form-urlencoded")
@@ -238,7 +255,7 @@ System.out.println("array of upload datat: "+Arrays.toString(r.as(UploadResponse
 	
 	@Test
 	public void testGpathFind() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().	
 			basePath("/movie/uploaddatalist") 
 				.contentType("application/x-www-form-urlencoded")
@@ -268,7 +285,7 @@ UploadResponse ur2 =	r.then().extract().body().jsonPath().getObject("find {it.by
 	
 	@Test
 	public void testGetFromJsonPath() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().	
 			basePath("/movie/uploaddatalist") 
 				.contentType("application/x-www-form-urlencoded")
@@ -296,7 +313,7 @@ UploadResponse ur2= r.then().extract().jsonPath().getObject("[0]", UploadRespons
 	// or response extract body jsonpath, all are same
 	@Test
 	public void testJsonPathFromResponseDirectly() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().	
 			basePath("/movie/uploaddatalist") 
 				.contentType("application/x-www-form-urlencoded")
@@ -321,7 +338,7 @@ UploadResponse ur2= r.body().jsonPath().getObject("[0]", UploadResponse.class);
 	
 	@Test
 	public void testGetObjectArraytAndGetList() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().	
 			basePath("/movie/uploaddatalist") 
 				.contentType("application/x-www-form-urlencoded")
@@ -353,7 +370,7 @@ UploadResponse ur2= r.body().jsonPath().getObject("[0]", UploadResponse.class);
 	
 	@Test
 	public void testJsonPathFindMethod() {
-		RestAssured.baseURI = "http://localhost:8080/myrestapp";
+		//RestAssured.baseURI = "http://localhost:8080/myrestapp";
 		Response r = given().	
 			basePath("/movie/uploaddatalist") 
 				.contentType("application/x-www-form-urlencoded")

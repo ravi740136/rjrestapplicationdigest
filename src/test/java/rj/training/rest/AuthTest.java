@@ -20,9 +20,10 @@ public class AuthTest {
 @Test
 public void testGetCompany() {
 	RestAssured.baseURI = "http://localhost:8080/myrestapp";
-   Response r =  given()
+   Response r =  given().log().all()
 		   //preemptive basic and basic both will work
 		   .auth().preemptive().basic("raviuser", "ravipass")
+		   //.auth().digest("raviuser", "ravipass")
 		   .basePath("/basicauthuser/getMovies").log().all().get();
    r.then().log().all();
 }
