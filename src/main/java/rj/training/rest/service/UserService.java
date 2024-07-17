@@ -18,14 +18,14 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void createUser(String username, String rawPassword) {
+    public Users createUser(String username, String rawPassword) {
     //String encodedPassword = rawPassword;
    String encodedPassword = passwordEncoder.encode(rawPassword);
         Users user = new Users();
         user.setUsername(username);
         user.setPassword(encodedPassword);
         user.setRole("ROLE_USER");
-        userRepository.save(user);
+        return userRepository.save(user);
     }
     
     public List<Users> getAllUsers() {

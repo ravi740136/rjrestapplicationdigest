@@ -14,6 +14,6 @@ public class DataInitializer {
 
 	@PostConstruct
 	public void init() {
-		service.createUser("raviuser", "password");
+		service.createUser("raviuser", "ravipass");
 	}
 }

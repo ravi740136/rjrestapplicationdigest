@@ -13,8 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 
-//@Configuration
-public class SecurityConfig {
+@Configuration
+public class SecurityConfigBasic {
 	
 	@Autowired
 	UserDetailsService userDetailsService;
@@ -40,10 +40,8 @@ public class SecurityConfig {
                     .requestMatchers("/myrestapp/basicauthuser/**").hasRole("USER")
                     .anyRequest().permitAll()
             )
-            
-            .exceptionHandling(e -> e.authenticationEntryPoint(digestEntryPoint()))
-    		.addFilter(digestAuthenticationFilter())
-                      
+            .httpBasic()
+            .and()
             .csrf().disable()
             //.userDetailsService(userDetailsService)            
             .headers().frameOptions().disable();
@@ -51,21 +49,5 @@ public class SecurityConfig {
         return http.build();
     }
 	
-	@Bean
-    public DigestAuthenticationEntryPoint digestEntryPoint() {
-        DigestAuthenticationEntryPoint entryPoint = new DigestAuthenticationEntryPoint();
-        entryPoint.setRealmName("My App Realm");
-        entryPoint.setKey("3028472b-da34-4501-bfd8-a355c42bdf92");
-        //entryPoint.setNonceValiditySeconds(300);
-        return entryPoint;
-    }
-
-    @Bean
-    public DigestAuthenticationFilter digestAuthenticationFilter() throws Exception {
-        DigestAuthenticationFilter filter = new DigestAuthenticationFilter();
-        filter.setAuthenticationEntryPoint(digestEntryPoint());
-        filter.setUserDetailsService(userDetailsService);
-      //  filter.setPasswordAlreadyEncoded(true); // Assuming passwords are already encoded with MD5
-        return filter;
-    }
+	
 }

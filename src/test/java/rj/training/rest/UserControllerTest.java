@@ -37,8 +37,8 @@ public class UserControllerTest {
     	 
         given()
         .contentType(ContentType.JSON)
-        //.auth().preemptive().basic("raviuser", "ravipass")
-        .auth().digest("raviuser2", "password")
+        .auth().preemptive().basic("raviuser", "ravipass")
+        //.auth().digest("raviuser2", "password")
         .basePath("/basicauthuser").log().all()
         .when()
             .get("/users")

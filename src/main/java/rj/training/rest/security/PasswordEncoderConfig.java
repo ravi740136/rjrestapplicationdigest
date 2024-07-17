@@ -21,7 +21,7 @@ public class PasswordEncoderConfig {
 		encoders.put(encodingId, new BCryptPasswordEncoder());
     	encoders.put("noop", NoOpPasswordEncoder.getInstance());
     	encoders.put("MD5", new MessageDigestPasswordEncoder("MD5"));
-    	return new DelegatingPasswordEncoder("MD5", encoders);
+    	return new DelegatingPasswordEncoder("noop", encoders);
       //return PasswordEncoderFactories.createDelegatingPasswordEncoder();// For Digest Authentication
     }
 }
