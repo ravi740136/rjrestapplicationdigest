@@ -48,7 +48,7 @@ public class Users {
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", role=" + role + ", token=" + token + "]";
+		return this.getClass().getSimpleName()+" [username=" + username + ", password=" + password + ", role=" + role + ", token=" + token + "]";
 	}
 	
 }

@@ -1,5 +1,7 @@
 package rj.training.rest.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,17 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public void createUser(String username, String rawPassword) {
-        String encodedPassword = "{noop}" + rawPassword;
-        // or "{bcrypt}" + passwordEncoder.encode(rawPassword);
+    //String encodedPassword = rawPassword;
+   String encodedPassword = passwordEncoder.encode(rawPassword);
         Users user = new Users();
         user.setUsername(username);
         user.setPassword(encodedPassword);
-        user.setRole("USER");
+        user.setRole("ROLE_USER");
         userRepository.save(user);
+    }
+    
+    public List<Users> getAllUsers() {
+    	return userRepository.findAll();	
     }
 
     // other methods
